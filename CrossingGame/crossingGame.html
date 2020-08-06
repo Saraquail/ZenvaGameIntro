@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crossing Game</title>
+  <style type="text/css">
+    canvas {
+      border: 2px solid black;
+      background-color: lightgreen;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Crossing Game</h1>
+
+  <canvas id="myCanvas" width="1000" height="500"></canvas>
+
+  <script type="text/javascript">
+    const canvas = document.getElementById('myCanvas')
+    const ctx = canvas.getContext('2d')
+
+    let screenWidth = 1000;
+    let screenHeight = 500;
+    let width = 50
+
+    class GameCharacter {
+      constructor(x, y, width, height, color, speed) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.color = color;
+        this.speed = speed;
+      }
+
+      moveX() {
+      }
+
+      moveY() {
+        if (this.y > screenHeight - width || this.y < 0) {
+          this.speed = -this.speed
+        }
+        this.y += this.speed
+      }
+    }
+
+    let enemies = [
+      new GameCharacter(200, 50, width, width, "rgb(255, 0, 0)", 2),
+      new GameCharacter(450, 400, width, width, "rgb(255, 0, 0)", 3),
+      new GameCharacter(700, 50, width, width, "rgb(255, 0, 0)", 4)
+    ];
+
+    let player = new GameCharacter(50, 225, width, width, "rgb(0, 0, 255)", 2)
+
+    const draw = function () {
+      ctx.clearRect(0, 0, screenWidth, screenHeight)
+
+      ctx.fillStyle = player.color;
+      ctx.fillRect(player.x, player.y, player.width, player.height)
+
+
+      enemies.forEach(element => {
+        ctx.fillStyle = element.color;
+        ctx.fillRect(element.x, element.y, element.width, element.height)
+      });
+    }
+
+    const update = function () {
+      enemies.forEach(element => {
+        element.moveY();
+      });
+    }
+
+    //game loop that controls movement
+    const step = function () {
+      update();
+      draw();
+
+      window.requestAnimationFrame(step); //simulates while loop behavior
+    }
+
+    step()
+  </script>
+</body>
+
+</html>
